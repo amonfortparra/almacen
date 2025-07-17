@@ -17,6 +17,12 @@ class OrderRepository extends ServiceEntityRepository
         parent::__construct($registry, Order::class);
     }
 
+    /**
+     * @author Alejandro
+     * @param picker
+     * 
+     * Buscamos el pedido mas prioritario del picker
+     */
     public function getPriorityOrderByPicker(picker $picker): ?Order
     {
         return $this->createQueryBuilder('o')

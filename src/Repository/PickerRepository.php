@@ -17,6 +17,11 @@ class PickerRepository extends ServiceEntityRepository
         parent::__construct($registry, Picker::class);
     }
 
+    /**
+     * @author Alejandro
+     * 
+     * Obtenemos el picker mas libre, si todos tienen pedidos asignados se obtendra el que menos pedidos tenga
+     */
     public function getFreePicker(): array
     {
         $sql = 'SELECT p.id, p.name, COUNT(o.id) AS active_orders

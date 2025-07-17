@@ -24,6 +24,12 @@ final class ApiController extends AbstractController
         ]);
     }
 
+    /**
+     * @author Alejandro
+     * @method POST
+     * 
+     * Recibe los datos necesarios para guardar los pedidos y asignarles un picker
+     */
     #[Route('/api/orders', name: 'api_post_orders', methods: "POST")]
     public function createOrder(EntityManagerInterface $interface, ValidatorInterface $validator, Request $request): JsonResponse
     {
@@ -55,12 +61,21 @@ final class ApiController extends AbstractController
         ]);
     }
 
+    /**
+     * @author Alejandro
+     * @method GET
+     * @param id id del picker a mostrar
+     * 
+     * Devuelve el picker seleccionar y el pedido con mayor prioridad
+     */
     #[Route('/api/pickers/{id}', name: 'api_get_picker' , methods: ['GET'])]
     public function pickerInfo(EntityManagerInterface $interface, int $id): JsonResponse
     {
         $repositoryPicker = $interface->getRepository(Picker::class);
         $picker = $repositoryPicker->find($id);
         $repositoryOrder = $interface->getRepository(Order::class);
+        
+        #Obtenemos el picker que tenga menos pedidos
         $priority_order = $repositoryOrder->getPriorityOrderByPicker($picker);
         $list_product = [];
         foreach ($priority_order->getListProductsOrderByProximity() as $prod) {

@@ -105,22 +105,33 @@ class Order
         return $this;
     }
 
+
+    /**
+     * @author Alejandro
+     * 
+     * Devuelve la lista de productos ordenada segun debe el picker recoger los productos
+     */
     public function getListProductsOrderByProximity() {
         $products = $this->getListProducts()->getValues();
         usort($products, function($a, $b) {
-            if ($a->getRack() !==$b->getRack()) {
+            # Compara las estanterias
+            if ($a->getRack() !== $b->getRack()) {
                 return $a->getRack() <=> $b->getRack();
             }
+
+            # Está comparando si es de las 4 primeras filas
             $aPrio = $a->getLine() <= 4;
             $bPrio = $a->getLine() <= 4;
 
             if ($aPrio && !$bPrio) return -1;
             if (!$aPrio && $bPrio) return 1;
 
+            # Compara entre bloques
             if ($a->getBLock() !==$b->getBLock()) {
                 return $a->getBLock() <=> $b->getBLock();
             }
 
+            # Compara cual es la fila menor
             return $a->getLine() - $b->getLine();
         });
 
